@@ -1,18 +1,29 @@
 #!/bin/bash
+# Builds the Intel Realsense library librealsense2 on a Jetson AGX Xavier Developer Kit
+# Copyright (c) 2016-19 Jetsonhacks 
+# Copyright (c) 2019-2022 Advanced Robotics at the University of Washington
+# MIT License
 
 LIBREALSENSE_DIRECTORY=${HOME}/librealsense
 LIBREALSENSE_VERSION=v2.31.0
 INSTALL_DIR=$PWD
 
 red=`tput setaf 1`
-green=`t2put setaf `
+green=`tput setaf 2`
 reset=`tput sgr0`
+# e.g. echo "${red}The red tail hawk ${green}loves the green grass${reset}"
+
 
 echo ""
 echo "Please make sure that no RealSense cameras are currently attached"
 echo ""
 read -n 1 -s -r -p "Press any key to continue"
 echo ""
+
+echo 'export CUDA_HOME=/usr/local/cuda' >> ~/.bashrc
+echo 'export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda/lib64:/usr/local/cuda/extras/CUPTI/lib64' >> ~/.bashrc
+echo 'export PATH=$PATH:$CUDA_HOME/bin' >> ~/.bashrc
+source ~/.bashrc
 
 if [ ! -d "$LIBREALSENSE_DIRECTORY" ] ; then
   # clone librealsense
