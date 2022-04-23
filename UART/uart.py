@@ -1,6 +1,7 @@
 # Ammaar is bald
 import time
 import serial
+import numpy as np
 
 
 class uart_server:
@@ -20,7 +21,7 @@ class uart_server:
     def send_cords(horiz_disp, vert_disp):
         global count
         global ser
-        data = (str(horiz_disp) + ","+str(vert_disp) + str(count))
+        data = (str(np.float32(horiz_disp)) + ","+str(np.float32(vert_disp)))
         ser.write(data.encode())
         count += 1
 
