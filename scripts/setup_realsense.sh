@@ -8,11 +8,6 @@ LIBREALSENSE_DIRECTORY=${HOME}/librealsense
 LIBREALSENSE_VERSION=v2.31.0
 INSTALL_DIR=$PWD
 
-echo 'export CUDA_HOME=/usr/local/cuda' >> ~/.bashrc
-echo 'export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda/lib64:/usr/local/cuda/extras/CUPTI/lib64' >> ~/.bashrc
-echo 'export PATH=$PATH:$CUDA_HOME/bin' >> ~/.bashrc
-source ~/.bashrc
-
 red=`tput setaf 1`
 green=`tput setaf 2`
 reset=`tput sgr0`
@@ -79,6 +74,12 @@ echo "${green}Applying udev rules${reset}"
 sudo cp config/99-realsense-libusb.rules /etc/udev/rules.d/
 sudo udevadm control --reload-rules && udevadm trigger
 
+# Set up CUDA environemnt
+echo 'export CUDA_HOME=/usr/local/cuda' >> ~/.bashrc
+echo 'export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda/lib64:/usr/local/cuda/extras/CUPTI/lib64' >> ~/.bashrc
+echo 'export PATH=$PATH:$CUDA_HOME/bin' >> ~/.bashrc
+source ~/.bashrc
+
 # Now compile librealsense and install
 mkdir build 
 cd build
@@ -115,4 +116,3 @@ echo " "
 
 echo 'export PYTHONPATH=$PYTHONPATH:/usr/local/lib' >> ~/.bashrc
 source ~/.bashrc
-
