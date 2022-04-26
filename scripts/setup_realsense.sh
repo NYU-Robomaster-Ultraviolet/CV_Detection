@@ -74,12 +74,6 @@ echo "${green}Applying udev rules${reset}"
 sudo cp config/99-realsense-libusb.rules /etc/udev/rules.d/
 sudo udevadm control --reload-rules && udevadm trigger
 
-# Set up CUDA environemnt
-echo 'export CUDA_HOME=/usr/local/cuda' >> ~/.bashrc
-echo 'export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda/lib64:/usr/local/cuda/extras/CUPTI/lib64' >> ~/.bashrc
-echo 'export PATH=$PATH:$CUDA_HOME/bin' >> ~/.bashrc
-source ~/.bashrc
-
 # Now compile librealsense and install
 mkdir build 
 cd build
