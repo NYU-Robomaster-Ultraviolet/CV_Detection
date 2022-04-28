@@ -108,5 +108,6 @@ echo " -----------------------------------------"
 echo " "
 
 
-echo 'export PYTHONPATH=$PYTHONPATH:/usr/local/lib' >> ~/.bashrc
+echo 'export PYTHONPATH=/usr/local/lib:$PYTHONPATH' >> ~/.bashrc
 source ~/.bashrc
+
