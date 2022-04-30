@@ -9,7 +9,7 @@ class uart_server:
     # Constructor
     def __init__(self):
         ser = serial.Serial(
-            port="/dev/ttyTHS2",
+            port="/dev/ttyTHS1",
             baudrate=115200,
             bytesize=serial.EIGHTBITS,
             parity=serial.PARITY_NONE,
