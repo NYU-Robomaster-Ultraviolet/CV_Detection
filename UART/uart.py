@@ -23,7 +23,7 @@ class uart_server:
         global count
         global ser
         data = struct.pack('fff', np.float32(
-            horiz_disp), np.float32(vert_disp), 1)
+            horiz_disp/640), np.float32(vert_disp/480), 1)
         ser.write(data)
         count += 1
 
