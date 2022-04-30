@@ -2,6 +2,7 @@
 import time
 import serial
 import numpy as np
+import struct
 
 
 class uart_server:
@@ -21,8 +22,9 @@ class uart_server:
     def send_cords(horiz_disp, vert_disp):
         global count
         global ser
-        data = (str(np.float32(horiz_disp)) + ","+str(np.float32(vert_disp)))
-        ser.write(data.encode())
+        data = struct.pack('fff', np.float32(
+            horiz_disp), np.float32(vert_disp), 1)
+        ser.write(data)
         count += 1
 
     # Determine movement offset
