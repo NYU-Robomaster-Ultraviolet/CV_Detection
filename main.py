@@ -7,7 +7,7 @@ from Algorithm.main import *
 import cv2
 import time
 import argparse
-from UART import uart_server
+from UART.uart import uart_server
 
 matplotlib.use('TKAgg')
 # Disable tensorflow output
