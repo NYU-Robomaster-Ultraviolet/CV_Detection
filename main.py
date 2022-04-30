@@ -78,8 +78,8 @@ def main(_argv):
                     show_frame(color_frame, depth_frame, depth, coordinates)
 
                 uartServer.send_data(
-                    det_move_((coordinates[0]+coordinates[2])/2.f,
-                              (coordinates[1]+coordinates[3])/2.f),
+                    det_move_((coordinates[0]+coordinates[2])/2,
+                              (coordinates[1]+coordinates[3])/2),
                     dc.xres, dc.yres)
 
 
