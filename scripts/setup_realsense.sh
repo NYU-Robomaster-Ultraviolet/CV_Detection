@@ -5,8 +5,9 @@
 # MIT License
 
 LIBREALSENSE_DIRECTORY=${HOME}/librealsense
-LIBREALSENSE_VERSION=v2.31.0
+LIBREALSENSE_VERSION=v2.50.0
 INSTALL_DIR=$PWD
+NVCC_PATH=/usr/local/cuda/bin/nvcc
 
 red=`tput setaf 1`
 green=`tput setaf 2`
@@ -19,11 +20,6 @@ echo "Please make sure that no RealSense cameras are currently attached"
 echo ""
 read -n 1 -s -r -p "Press any key to continue"
 echo ""
-
-echo 'export CUDA_HOME=/usr/local/cuda' >> ~/.bashrc
-echo 'export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda/lib64:/usr/local/cuda/extras/CUPTI/lib64' >> ~/.bashrc
-echo 'export PATH=$PATH:$CUDA_HOME/bin' >> ~/.bashrc
-source ~/.bashrc
 
 if [ ! -d "$LIBREALSENSE_DIRECTORY" ] ; then
   # clone librealsense
@@ -84,9 +80,13 @@ mkdir build
 cd build
 # Build examples, including graphical ones
 echo "${green}Configuring Make system${reset}"
+# Configure CUDA
+export CUDACXX=$NVCC_PATH
+export PATH=${PATH}:/usr/local/cuda/bin
+export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/usr/local/cuda/lib64
 # Use the CMake version that we built, must be > 3.8
 # Build with CUDA (default), the CUDA flag is USE_CUDA, ie -DUSE_CUDA=true
-cmake ../ -DBUILD_EXAMPLES=true -DCMAKE_BUILD_TYPE=Release -DBUILD_WITH_CUDA=ON -DFORCE_RSUSB_BACKEND:BOOL=ON -DBUILD_PYTHON_BINDINGS=true -DPYTHON_EXECUTABLE=`which python`
+cmake ../ -DBUILD_EXAMPLES=true -DCMAKE_BUILD_TYPE=Release -DBUILD_WITH_CUDA=ON -DFORCE_RSUSB_BACKEND:BOOL=ON -DBUILD_PYTHON_BINDINGS=true -DPYTHON_EXECUTABLE=`which python3`
 # The library will be installed in /usr/local/lib, header files in /usr/local/include
 # The demos, tutorials and tests will located in /usr/local/bin.
 echo "${green}Building librealsense, headers, tools and demos${reset}"

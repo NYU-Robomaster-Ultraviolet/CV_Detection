@@ -1,7 +1,7 @@
 # pip install -r requirements.txt
 
 # Base ----------------------------------------
-matplotlib>=3.2.2
+# matplotlib>=3.2.2 install via sudo apt-get install python-matplotlib
 numpy>=1.18.5
 opencv-python>=4.1.2
 Pillow>=7.1.2
@@ -35,4 +35,4 @@ seaborn>=0.11.0
 # roboflow
 thop  # FLOPs computation
 
-pyrealsense2
+# pyrealsense2 Install via setup_realsense script under scripts folder
