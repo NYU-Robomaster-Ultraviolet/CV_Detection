@@ -35,14 +35,14 @@ def main(_argv):
     Debug_flag = 0
 
     # Parse arguments
-    if _argv.Debug == "1" or _argv.D == "1":
-        Debug_flag = 1
-        # Create window for video
-        cv2.namedWindow("Video")
-        cv2.namedWindow("Video_Depth")
+    # if _argv.Debug == "1" or _argv.D == "1":
+    #    Debug_flag = 1
+    #    # Create window for video
+    #    cv2.namedWindow("Video")
+    #    cv2.namedWindow("Video_Depth")
 
-    elif _argv.Debug == "0" or _argv.D == "0":
-        Debug_flag = 0
+    # elif _argv.Debug == "0" or _argv.D == "0":
+    #   Debug_flag = 0
 
     # Load saved CV model
     model = get_model()
