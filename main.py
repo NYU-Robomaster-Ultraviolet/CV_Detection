@@ -81,8 +81,8 @@ def main(_argv):
                     det_move_(
                         (coordinates[0]+coordinates[2])/2,
                         (coordinates[1]+coordinates[3])/2,
-                        dc.xres,
-                        dc.yres)
+                        640,
+                        480)
                 )
 
 
