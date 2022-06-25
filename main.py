@@ -20,10 +20,10 @@ matplotlib.use('TKAgg')
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
 
-red_lower = np.array([0, 43, 226])
+red_lower = np.array([0, 4, 226])
 red_upper = np.array([60, 255, 255])
-blue_lower = np.array([68, 167, 131])
-blue_upper = np.array([105, 255, 255])
+blue_lower = np.array([68, 38, 131])
+blue_upper = np.array([113, 255, 255])
 
 
 def red_or_blue(color_frame):
