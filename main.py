@@ -1,18 +1,17 @@
-from UART.uart import uart_server
-import argparse
-import time
-import cv2
-from Algorithm.main import *
-from Realsense.realsense import *
-from Realsense.realsense_depth import *
-import matplotlib
-from turtle import color
 import os
 import serial
 import numpy as np
+from turtle import color
+import matplotlib
+from Realsense.realsense_depth import *
+from Realsense.realsense import *
+from Algorithm.main import *
+import cv2
+import time
+import argparse
 import struct
+from UART.uart import uart_server
 opponent_team = 'r'  # 'r' or 'b'
-
 count = 0
 
 matplotlib.use('TKAgg')
@@ -37,6 +36,7 @@ def red_or_blue(color_frame):
 
     if len(red_contours) > 0 and len(blue_contours) > 0:
         r_area = 0
+        b_area = 0
         for c in red_contours:
             r_area += cv2.contourArea(c)
         for c in blue_contours:
@@ -55,10 +55,10 @@ def send_cords(ser, horiz_disp, vert_disp):
     global count
     data = struct.pack('fff', np.float32(
         horiz_disp/640), np.float32(vert_disp/480), 1)
-    # try:
-    ser.write(data)
-    # except:
-    #print("Error writing serial data")
+    try:
+        ser.write(data)
+    except:
+        print("Error writing serial data")
     count += 1
 
 
@@ -143,14 +143,16 @@ def main(_argv):
                     print(coordinates)
                     print(depth)
                     show_frame(color_frame, depth_frame, depth, coordinates)
-                if red_or_blue(color_frame) != opponent_team:
-                    pass
+
                # try:
                 final_cords = det_move_(
                     (coordinates[0]+coordinates[2])/2,
                     (coordinates[1]+coordinates[3])/2,
                     640,
                     480)
+
+                if red_or_blue(color_frame) != opponent_team:
+                    pass
                 print(final_cords[0], final_cords[1])
                 send_cords(ser, final_cords[0], final_cords[1])
                # except:
