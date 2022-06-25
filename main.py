@@ -9,20 +9,37 @@ import time
 import argparse
 from UART.uart import uart_server
 
+count = 0
+
 matplotlib.use('TKAgg')
 # Disable tensorflow output
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
+import time
+import serial
+import numpy as np
+import struct
+
+def send_cords(ser, horiz_disp, vert_disp):
+    global count
+    data = struct.pack('fff', np.float32(
+        horiz_disp/640), np.float32(vert_disp/480), 1)
+    #try:
+    ser.write(data)
+    #except:
+        #print("Error writing serial data")
+    count += 1
 
 def det_move_(obj_x_coord, obj_y_coord, xres, yres):
-    centerx, centery = xres/2, yres/2
+    obj_y_coord=yres-obj_y_coord
+    centerx, centery = xres/2.0, yres/2.0
 
     move_x = obj_x_coord-centerx
     move_y = obj_y_coord-centery
     if(move_x != 0):
-        move_x /= abs(obj_x_coord-centerx)
+        move_x /= centerx
     if(move_y != 0):
-        move_y /= abs(obj_y_coord-centery)
+        move_y /= centery
     return(move_x, move_y)
 
 
@@ -47,13 +64,25 @@ def main(_argv):
     # Load saved CV model
     model = get_model()
 
+    ser = serial.Serial(
+            port="/dev/ttyTHS1",
+            baudrate=115200,
+            bytesize=serial.EIGHTBITS,
+            parity=serial.PARITY_NONE,
+            stopbits=serial.STOPBITS_ONE,
+            timeout=1
+        )
+
     # Initialize Algorithm
     oldCords = None
     depth = None
 
     while True:
         # Start Video Capture
-        ret, depth_frame, color_frame = dc.get_frame()
+        try:
+            ret, depth_frame, color_frame = dc.get_frame()
+        except:
+            print("Error getting frame")
 
         # If frame is not empty
         if ret:
@@ -63,12 +92,18 @@ def main(_argv):
                 break
 
             # Get coordinates from color frame
-            coordinates = get_coordinates(color_frame, model)
+            try:
+                coordinates = get_coordinates(color_frame, model)
+            except:
+                print("Error getting cordinates\n");
 
             if coordinates != None:
                 # Get Median Depth from depth frame
-                depth = process_frame(
-                    depth_frame, coordinates[0], coordinates[1], coordinates[2], coordinates[3])
+                try:
+                    depth = process_frame(
+                        depth_frame, coordinates[0], coordinates[1], coordinates[2], coordinates[3])
+                except:
+                    print("Error processing_frame")
 
                 # Debug mode
                 if Debug_flag == 1:
@@ -77,13 +112,20 @@ def main(_argv):
                     print(depth)
                     show_frame(color_frame, depth_frame, depth, coordinates)
 
-                uartServer.send_cords(
-                    det_move_(
-                        (coordinates[0]+coordinates[2])/2,
-                        (coordinates[1]+coordinates[3])/2,
-                        640,
-                        480)
-                )
+               # try:
+                final_cords=det_move_(
+                            (coordinates[0]+coordinates[2])/2,
+                            (coordinates[1]+coordinates[3])/2,
+                            640,
+                            480)
+                print(final_cords[0], final_cords[1])
+                send_cords(ser, final_cords[0],final_cords[1])
+               # except:
+                 #   print("Error sending coordinates", coordinates[0], coordinates[1], coordinates[2], coordinates[3],  det_move_(
+                 #           (coordinates[0]+coordinates[2])/2,
+                 #           (coordinates[1]+coordinates[3])/2,
+                 #           640,
+                 #           480))
 
 
 if __name__ == '__main__':
