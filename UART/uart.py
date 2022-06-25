@@ -19,13 +19,16 @@ class uart_server:
         count = 0
 
     # Send coordinates to (Dat Board) Development Board Type C
-    def send_cords(horiz_disp, vert_disp):
-        global count
-        global ser
-        data = struct.pack('fff', np.float32(
-            horiz_disp/640), np.float32(vert_disp/480), 1)
-        ser.write(data)
-        count += 1
+#    def send_cords(horiz_disp, vert_disp):
+#        global count
+#        global ser
+#        data = struct.pack('fff', np.float32(
+#            horiz_disp/640), np.float32(vert_disp/480), 1)
+#        #try:
+#        ser.write(data)
+#        #except:
+#            #print("Error writing serial data")
+#        count += 1
 
     # Determine movement offset
     def det_move(obj_x_coord, obj_y_coord, xres, yres):
@@ -38,4 +41,4 @@ class uart_server:
         if(move_y != 0):
             move_y /= abs(obj_y_coord-centery)
 
-        return(move_x, move_y)
+        return (move_x, move_y)
